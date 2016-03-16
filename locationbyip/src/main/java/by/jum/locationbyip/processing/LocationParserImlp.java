@@ -25,7 +25,7 @@ public class LocationParserImlp implements LocationParser {
     @Override
     public List<LocationInformation> getLocationInformation(String information) {
         List<LocationInformation> locationInformations = new ArrayList<>();
-        Object json = null;
+        Object json;
         try {
             json = new JSONTokener(information).nextValue();
             JSONObject jsonObject;

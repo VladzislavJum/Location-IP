@@ -42,6 +42,15 @@ public class InformationActivity extends AppCompatActivity {
         LocationInformationAdapter informationAdapter = new LocationInformationAdapter(this, locationInformations);
         ListView listView = (ListView) findViewById(R.id.infoView);
         listView.setAdapter(informationAdapter);
+
+        LocationInformationAdapter informationAdapter1 = new LocationInformationAdapter(this, locationInformations);
+        ListView listView1 = (ListView) findViewById(R.id.infoView);
+        listView1.setAdapter(informationAdapter1);
+
+       /* DatabaseHandler handler = new DatabaseHandler(this);
+        SQLiteDatabase database = handler.getWritableDatabase();
+        LocationInformation information = handler.getInformationByIP("93.171.160.217", database);
+        Log.i(TAG, information.getCity());*/
     }
 
 }

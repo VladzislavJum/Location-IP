@@ -26,6 +26,9 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = MainActivity.class.toString();
+
+    private LinearLayout currentLocationLayout;
+
     private Button refreshButton;
     private Button infoButton;
     private EditText ipEditText;
@@ -41,11 +44,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ipEditText = (EditText) findViewById(R.id.ipEditText);
         locationTextView = (TextView) findViewById(R.id.locationTextView);
         flag = (ImageView) findViewById(R.id.flagImageView);
+        currentLocationLayout = (LinearLayout) findViewById(R.id.currentLocationLayout);
 
         infoButton.setOnClickListener(this);
      /*   Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
 
+        if (isNetworkAvailable(this)) {
+            computeCurrentLocation();
+        } else {
+            addRefreshButton();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        removeRefreshButton();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         if (isNetworkAvailable(this)) {
             computeCurrentLocation();
         } else {
@@ -84,10 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             List<LocationInformation> informationList = new ResponseHeader().execute("").get();
             LocationInformation information = informationList.get(0);
-            StringBuilder builder = new StringBuilder();
-            builder.append(information.getIp()).append(" - ").
-                    append(information.getCountry()).append(", ").append(information.getCity());
-            locationTextView.setText(builder.toString());
+            locationTextView.setText(information.getIp() + " - " + information.getCountry() + ", " + information.getCity());
             flag.setImageBitmap(information.getFlag());
         } catch (InterruptedException e) {
             Log.e(TAG, ErrorConstants.PROCESSING_STOPPED_ERROR);
@@ -107,20 +124,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (refreshButton == null) {
             flag.setImageBitmap(null);
             locationTextView.setText(Messages.NOT_INTERNET);
-            final LinearLayout layout = (LinearLayout) findViewById(R.id.currentLocationLayout);
+
             refreshButton = new Button(this);
             refreshButton.setText(Messages.REFRESH);
-            layout.addView(refreshButton);
+            currentLocationLayout.addView(refreshButton);
             refreshButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (isNetworkAvailable(MainActivity.this)) {
-                        layout.removeView(refreshButton);
-                        refreshButton = null;
+                        removeRefreshButton();
                         computeCurrentLocation();
                     }
                 }
             });
         }
+    }
+
+    private void removeRefreshButton(){
+        currentLocationLayout.removeView(refreshButton);
+        refreshButton = null;
     }
 }

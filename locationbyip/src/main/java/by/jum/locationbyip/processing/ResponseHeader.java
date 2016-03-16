@@ -31,7 +31,6 @@ public class ResponseHeader extends AsyncTask<String, Void, List<LocationInforma
             URL geoAPIUrl = new URL(UrlConstants.GEO_API_URL + ip);
             URLConnection urlConnection = geoAPIUrl.openConnection();
             reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-//TODO: Add checking internet connection
             String response;
             while ((response = reader.readLine()) != null) {
                 allResponse.append(response);

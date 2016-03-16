@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:focusable="true"
-                android:textSize="38sp"
+                android:textSize="35sp"
                 />
     </ScrollView>
     <Button

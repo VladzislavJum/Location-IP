@@ -44,7 +44,6 @@ public class LocationInformationAdapter extends BaseAdapter {
         if (view == null) {
             view = inflater.inflate(R.layout.info, parent, false);
         }
-
         information = (LocationInformation) getItem(position);
         StringBuilder builder = new StringBuilder();
         builder.append(information.getIp()).append(" - ").append(information.getCountry()).
