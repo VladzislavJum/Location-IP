@@ -1,5 +1,8 @@
 package by.jum.locationbyip.activity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,11 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import by.jum.locationbyip.LocationInformation;
 import by.jum.locationbyip.R;
 import by.jum.locationbyip.constants.ErrorConstants;
+import by.jum.locationbyip.constants.Messages;
 import by.jum.locationbyip.processing.ResponseHeader;
 
 import java.util.List;
@@ -22,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = MainActivity.class.toString();
-
+    private Button refreshButton;
     private Button infoButton;
     private EditText ipEditText;
     private TextView locationTextView;
@@ -42,7 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      /*   Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
 
-        computeCurrentLocation();
+        if (isNetworkAvailable(this)) {
+            computeCurrentLocation();
+        } else {
+            addRefreshButton();
+        }
     }
 
     @Override
@@ -62,14 +70,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        ResponseHeader header = new ResponseHeader();
-        StringBuilder builder = new StringBuilder();
+        if (!isNetworkAvailable(this)) {
+            addRefreshButton();
+            return;
+        }
+        Intent intent = new Intent(this, InformationActivity.class);
+        intent.putExtra(Messages.IP_TEXT, ipEditText.getText().toString().trim());
+        startActivity(intent);
+
+    }
+
+    private void computeCurrentLocation() {
         try {
-            List<LocationInformation> locationInformations = header.execute(ipEditText.getText().toString().trim()).get();
-            for (LocationInformation information : locationInformations) {
-                builder.append(information.getCountry() + " " + information.getCity() + "\n");
-            }
-            Toast.makeText(this, builder.toString(), Toast.LENGTH_SHORT).show();
+            List<LocationInformation> informationList = new ResponseHeader().execute("").get();
+            LocationInformation information = informationList.get(0);
+            StringBuilder builder = new StringBuilder();
+            builder.append(information.getIp()).append(" - ").
+                    append(information.getCountry()).append(", ").append(information.getCity());
+            locationTextView.setText(builder.toString());
+            flag.setImageBitmap(information.getFlag());
         } catch (InterruptedException e) {
             Log.e(TAG, ErrorConstants.PROCESSING_STOPPED_ERROR);
             e.printStackTrace();
@@ -79,18 +98,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void computeCurrentLocation() {
-        try {
-            List<LocationInformation> informationList = new ResponseHeader().execute("").get();
-            LocationInformation information = informationList.get(0);
-            locationTextView.setText(information.getIp() + " " + information.getCity() + ", " + information.getCountry());
-            flag.setImageBitmap(information.getFlag());
-        } catch (InterruptedException e) {
-            Log.e(TAG, ErrorConstants.PROCESSING_STOPPED_ERROR);
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            Log.e(TAG, ErrorConstants.RESPONSE_PROCESSING_ERROR);
+    public boolean isNetworkAvailable(final Context context) {
+        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    private void addRefreshButton() {
+        if (refreshButton == null) {
+            flag.setImageBitmap(null);
+            locationTextView.setText(Messages.NOT_INTERNET);
+            final LinearLayout layout = (LinearLayout) findViewById(R.id.currentLocationLayout);
+            refreshButton = new Button(this);
+            refreshButton.setText(Messages.REFRESH);
+            layout.addView(refreshButton);
+            refreshButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isNetworkAvailable(MainActivity.this)) {
+                        layout.removeView(refreshButton);
+                        refreshButton = null;
+                        computeCurrentLocation();
+                    }
+                }
+            });
         }
     }
 }
