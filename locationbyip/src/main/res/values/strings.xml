@@ -3,4 +3,11 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_information">InformationActivity</string>
     <string name="infoButton">Get Info</string>
+    <string name="showButton">Show Info</string>
+
+    <string-array name="numberItems">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+    </string-array>
 </resources>

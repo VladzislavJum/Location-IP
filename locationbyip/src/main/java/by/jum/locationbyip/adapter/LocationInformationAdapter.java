@@ -45,11 +45,9 @@ public class LocationInformationAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.info, parent, false);
         }
         information = (LocationInformation) getItem(position);
-        StringBuilder builder = new StringBuilder();
-        builder.append(information.getIp()).append(" - ").append(information.getCountry()).
-                append(", ").append(information.getCity());
-        ((TextView) view.findViewById(R.id.textView1)).setText(builder.toString());
-        ((ImageView) view.findViewById(R.id.imageView1)).setImageBitmap(information.getFlag());
+        ((TextView) view.findViewById(R.id.infoText)).setText(information.getIp() + "\n" +
+                information.getCountry() + ", " + information.getCity());
+        ((ImageView) view.findViewById(R.id.flagImageView)).setImageBitmap(information.getFlag());
         return view;
     }
 }

@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         currentLocationLayout = (LinearLayout) findViewById(R.id.currentLocationLayout);
 
         infoButton.setOnClickListener(this);
+//        TODO: check from db
      /*   Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
 
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             List<LocationInformation> informationList = new ResponseHeader().execute("").get();
             LocationInformation information = informationList.get(0);
-            locationTextView.setText(information.getIp() + " - " + information.getCountry() + ", " + information.getCity());
+            locationTextView.setText(information.getIp() + "\n" + information.getCountry() + ", " + information.getCity());
             flag.setImageBitmap(information.getFlag());
         } catch (InterruptedException e) {
             Log.e(TAG, ErrorConstants.PROCESSING_STOPPED_ERROR);
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void removeRefreshButton(){
+    private void removeRefreshButton() {
         currentLocationLayout.removeView(refreshButton);
         refreshButton = null;
     }
