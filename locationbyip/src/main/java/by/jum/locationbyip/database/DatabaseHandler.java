@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import by.jum.locationbyip.LocationInformation;
+import by.jum.locationbyip.models.LocationInformation;
 
 import java.io.ByteArrayOutputStream;
 
@@ -53,7 +53,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         content.put(IP, information.getIp());
         content.put(COUNTRY, information.getCountry());
         content.put(CITY, information.getCity());
-        content.put(FLAG, getBytes(information.getFlag()));
+        Bitmap flag = information.getFlag();
+        if (flag != null) {
+            content.put(FLAG, getBytes(flag));
+        }
         database.beginTransaction();
         database.insert(TABLE_NAME_INFO, null, content);
         database.setTransactionSuccessful();

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import by.jum.locationbyip.LocationInformation;
+import by.jum.locationbyip.models.LocationInformation;
 import by.jum.locationbyip.R;
 
 import java.util.List;
@@ -42,12 +42,12 @@ public class LocationInformationAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = inflater.inflate(R.layout.info, parent, false);
+            view = inflater.inflate(R.layout.item, parent, false);
         }
         information = (LocationInformation) getItem(position);
         ((TextView) view.findViewById(R.id.infoText)).setText(information.getIp() + "\n" +
                 information.getCountry() + ", " + information.getCity());
-        ((ImageView) view.findViewById(R.id.flagImageView)).setImageBitmap(information.getFlag());
+        ((ImageView) view.findViewById(R.id.flag_image_view)).setImageBitmap(information.getFlag());
         return view;
     }
 }

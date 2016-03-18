@@ -1,37 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/for_items_id"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-    <RelativeLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent">
-        <LinearLayout
-                android:id="@+id/pagginationLayout"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                android:layout_gravity="top">
-            <Spinner
-                    android:id="@+id/numberItemsSpinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:entries="@array/numberItems"
-                    />
+        >
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:id="@+id/for_items_linear"
+                      android:orientation="vertical">
         </LinearLayout>
-        <ListView
-                android:id="@+id/infoView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pagginationLayout"
-                >
-        </ListView>
-    </RelativeLayout>
-    <Button android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/showButton"
-            android:id="@+id/but"
-            android:layout_gravity="bottom"
-            />
-</FrameLayout>
+    </ScrollView>
+</LinearLayout>

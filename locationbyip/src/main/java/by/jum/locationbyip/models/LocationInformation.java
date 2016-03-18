@@ -1,4 +1,4 @@
-package by.jum.locationbyip;
+package by.jum.locationbyip.models;
 
 import android.graphics.Bitmap;
 

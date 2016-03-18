@@ -1,9 +1,7 @@
 package by.jum.locationbyip.processing;
 
-import by.jum.locationbyip.LocationInformation;
-
-import java.util.List;
+import by.jum.locationbyip.models.LocationInformation;
 
 public interface LocationParser {
-    List<LocationInformation> getLocationInformation(String information);
+    LocationInformation getLocationInformation(String information);
 }

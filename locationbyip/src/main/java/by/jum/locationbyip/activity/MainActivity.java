@@ -14,13 +14,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import by.jum.locationbyip.LocationInformation;
 import by.jum.locationbyip.R;
 import by.jum.locationbyip.constants.ErrorConstants;
 import by.jum.locationbyip.constants.Messages;
+import by.jum.locationbyip.models.LocationInformation;
 import by.jum.locationbyip.processing.ResponseHeader;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -42,12 +41,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         infoButton = (Button) findViewById(R.id.infoButton);
         ipEditText = (EditText) findViewById(R.id.ipEditText);
-        locationTextView = (TextView) findViewById(R.id.locationTextView);
-        flag = (ImageView) findViewById(R.id.flagImageView);
+        locationTextView = (TextView) findViewById(R.id.location_text_view);
+        flag = (ImageView) findViewById(R.id.flag_image_view);
         currentLocationLayout = (LinearLayout) findViewById(R.id.currentLocationLayout);
 
         infoButton.setOnClickListener(this);
-//        TODO: check from db
      /*   Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
 
@@ -96,15 +94,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
         Intent intent = new Intent(this, InformationActivity.class);
-        intent.putExtra(Messages.IP_TEXT, ipEditText.getText().toString().trim());
+        intent.putExtra(Messages.IP_TEXT, ipEditText.getText().toString().replace(" ", ""));
         startActivity(intent);
 
     }
 
     private void computeCurrentLocation() {
         try {
-            List<LocationInformation> informationList = new ResponseHeader().execute("").get();
-            LocationInformation information = informationList.get(0);
+            LocationInformation information = new ResponseHeader().execute("").get();
             locationTextView.setText(information.getIp() + "\n" + information.getCountry() + ", " + information.getCity());
             flag.setImageBitmap(information.getFlag());
         } catch (InterruptedException e) {

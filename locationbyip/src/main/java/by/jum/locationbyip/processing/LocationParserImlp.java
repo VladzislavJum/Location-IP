@@ -3,47 +3,43 @@ package by.jum.locationbyip.processing;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import by.jum.locationbyip.LocationInformation;
 import by.jum.locationbyip.constants.ErrorConstants;
 import by.jum.locationbyip.constants.KeyJSONAttrConstants;
 import by.jum.locationbyip.constants.UrlConstants;
-import org.json.JSONArray;
+import by.jum.locationbyip.models.LocationInformation;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LocationParserImlp implements LocationParser {
 
     private final String TAG = LocationParserImlp.class.toString();
 
     @Override
-    public List<LocationInformation> getLocationInformation(String information) {
-        List<LocationInformation> locationInformations = new ArrayList<>();
+    public LocationInformation getLocationInformation(String information) {
+        LocationInformation locationInformation = new LocationInformation();
         Object json;
         try {
-            json = new JSONTokener(information).nextValue();
+//            json = new JSONTokener(information).nextValue();
             JSONObject jsonObject;
-            if (json instanceof JSONObject) {
-                jsonObject = new JSONObject(information);
-                locationInformations.add(getGeoInformation(jsonObject));
-            } else if (json instanceof JSONArray) {
+            jsonObject = new JSONObject(information);
+            return getGeoInformation(jsonObject);
+//            if (json instanceof JSONObject) {
+
+          /*  } else if (json instanceof JSONArray) {
                 JSONArray jsonArray = new JSONArray(information);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     jsonObject = jsonArray.getJSONObject(i);
                     locationInformations.add(getGeoInformation(jsonObject));
-                }
-            }
+                }*/
         } catch (JSONException e) {
             Log.e(TAG, ErrorConstants.JSON_PARSE_EXCEPTION);
             e.printStackTrace();
         }
-        return locationInformations;
+        return locationInformation;
     }
 
     private LocationInformation getGeoInformation(JSONObject jsonObject) throws JSONException {
