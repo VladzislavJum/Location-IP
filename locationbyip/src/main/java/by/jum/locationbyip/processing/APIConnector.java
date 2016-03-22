@@ -1,10 +1,8 @@
 package by.jum.locationbyip.processing;
 
-import android.os.AsyncTask;
 import android.util.Log;
 import by.jum.locationbyip.constants.ErrorConstants;
 import by.jum.locationbyip.constants.UrlConstants;
-import by.jum.locationbyip.models.LocationInformation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,18 +10,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class ResponseHeader extends AsyncTask<String, Void, LocationInformation> {
+public class APIConnector {
 
-    private final String TAG = ResponseHeader.class.toString();
+    private final String TAG = APIConnector.class.toString();
 
-    @Override
-    protected LocationInformation doInBackground(String... params) {
-        String response = getResponse(params[0]);
-        LocationParser locationParser = new LocationParserImlp();
-        return locationParser.getLocationInformation(response);
-    }
-
-    private String getResponse(String ip) {
+    public String getResponse(String ip) {
         BufferedReader reader = null;
         StringBuilder allResponse = new StringBuilder();
         try {
@@ -36,7 +27,7 @@ public class ResponseHeader extends AsyncTask<String, Void, LocationInformation>
             }
         } catch (IOException e) {
             Log.e(TAG, ErrorConstants.RESPONSE_READ_ERROR);
-                    e.printStackTrace();
+            e.printStackTrace();
         } finally {
             try {
                 if (reader != null) {
@@ -50,8 +41,4 @@ public class ResponseHeader extends AsyncTask<String, Void, LocationInformation>
         return allResponse.toString();
     }
 
-    @Override
-    protected void onProgressUpdate(Void... values) {
-        super.onProgressUpdate(values);
-    }
 }

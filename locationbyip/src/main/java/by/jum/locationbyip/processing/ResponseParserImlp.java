@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import by.jum.locationbyip.constants.ErrorConstants;
 import by.jum.locationbyip.constants.KeyJSONAttrConstants;
+import by.jum.locationbyip.constants.Messages;
 import by.jum.locationbyip.constants.UrlConstants;
 import by.jum.locationbyip.models.LocationInformation;
 import org.json.JSONException;
@@ -14,32 +15,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public class LocationParserImlp implements LocationParser {
+public class ResponseParserImlp implements ResponseParser {
 
-    private final String TAG = LocationParserImlp.class.toString();
+    private final static String TAG = ResponseParserImlp.class.toString();
 
     @Override
     public LocationInformation getLocationInformation(String information) {
-        LocationInformation locationInformation = new LocationInformation();
-        Object json;
         try {
-//            json = new JSONTokener(information).nextValue();
             JSONObject jsonObject;
             jsonObject = new JSONObject(information);
             return getGeoInformation(jsonObject);
-//            if (json instanceof JSONObject) {
-
-          /*  } else if (json instanceof JSONArray) {
-                JSONArray jsonArray = new JSONArray(information);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    locationInformations.add(getGeoInformation(jsonObject));
-                }*/
         } catch (JSONException e) {
             Log.e(TAG, ErrorConstants.JSON_PARSE_EXCEPTION);
-            e.printStackTrace();
         }
-        return locationInformation;
+        return null;
     }
 
     private LocationInformation getGeoInformation(JSONObject jsonObject) throws JSONException {
@@ -47,9 +36,18 @@ public class LocationParserImlp implements LocationParser {
         JSONObject cityJsonObject = jsonObject.getJSONObject(KeyJSONAttrConstants.CITY);
         JSONObject countryJsonObject = jsonObject.getJSONObject(KeyJSONAttrConstants.COUNTRY);
         String domain = countryJsonObject.getString(KeyJSONAttrConstants.DOMAIN).toLowerCase();
-
-        locationInformation.setCity(cityJsonObject.getString(KeyJSONAttrConstants.NAME));
-        locationInformation.setCountry(countryJsonObject.getString(KeyJSONAttrConstants.NAME));
+        String country = countryJsonObject.getString(KeyJSONAttrConstants.NAME);
+        String city = cityJsonObject.getString(KeyJSONAttrConstants.NAME);
+        if (country == null || country.equals("")) {
+            locationInformation.setCountry(Messages.NOT_INF);
+        } else {
+            locationInformation.setCountry(country);
+        }
+        if (city == null || city.equals("")){
+            locationInformation.setCity(Messages.NOT_INF);
+        } else {
+            locationInformation.setCity(city);
+        }
         locationInformation.setFlag(getFlag(domain));
         locationInformation.setIp(jsonObject.getString(KeyJSONAttrConstants.IP));
         return locationInformation;

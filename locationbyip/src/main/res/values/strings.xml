@@ -4,10 +4,5 @@
     <string name="title_activity_information">InformationActivity</string>
     <string name="info_button">Get Info</string>
     <string name="show_button">Show Info</string>
-
-    <string-array name="number_items">
-        <item>One</item>
-        <item>Two</item>
-        <item>Three</item>
-    </string-array>
+    <string name="refresh_button">Refresh</string>
 </resources>

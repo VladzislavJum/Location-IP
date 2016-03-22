@@ -5,57 +5,72 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
             android:id="@+id/currentLocationLayout"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary">
         <ImageView
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_width="@dimen/image_width"
+                android:layout_height="match_parent"
                 android:src="@drawable/ip_location"
-                android:id="@+id/flagImageViewMain"
-                android:layout_weight="1"/>
+                android:id="@+id/flag_image_view_main"/>
         <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/location_text_view"
-                android:layout_weight="3"
-                android:textSize="20sp"
+                android:textSize="@dimen/current_location_text"
                 android:textColor="@color/colorWhite"
                 android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:layout_toEndOf="@+id/flag_image_view_main"
+                android:layout_toStartOf="@+id/flag_image_view"
                 />
         <ImageView
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_width="@dimen/image_width"
+                android:layout_height="match_parent"
                 android:id="@+id/flag_image_view"
-                android:layout_weight="1"/>
-    </LinearLayout>
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"/>
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/refresh_button"
+                android:src="@drawable/update"
+                android:layout_alignParentEnd="true"
+                android:background="@color/colorPrimary"
+                android:visibility="invisible"
+                android:scaleType="centerInside"
+
+                android:layout_toEndOf="@+id/location_text_view"/>
+    </RelativeLayout>
     <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/layout_for_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <ScrollView
-                android:id="@+id/scrollView"
+                android:id="@+id/scroll_view_ip"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 android:layout_gravity="top"
-                android:layout_above="@+id/infoButton"
-                android:layout_alignParentStart="true">
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_above="@+id/info_button">
             <EditText
-                    android:id="@+id/ipEditText"
+                    android:id="@+id/ip_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
-                    android:textSize="35sp"
-                    />
+                    android:textSize="@dimen/ip_edit_text">
+            </EditText>
         </ScrollView>
         <Button
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/infoButton"
+                android:layout_height="@dimen/info_button"
+                android:id="@+id/info_button"
                 android:text="@string/info_button"
                 android:layout_gravity="bottom"
                 android:layout_alignParentBottom="true"
